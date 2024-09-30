@@ -12,6 +12,8 @@ The libraries, modules and other tools referred during this task are as follows:
 ---
 ### Setting Gmail SMTP Password
 
+Before following these steps, make sure that your GMail account has **2-Factor Verification** enabled
+
 1. Navigate to [**Gmail Account: App Passwords**](https://myaccount.google.com/apppasswords?rapt=AEjHL4OrwU89dz8b1QyDNkZKucbOgm_8NKhED-dXDuExhXLP5W90VGHF1_ZT0aB_1NvwwT3bluDoJ1gxp2x0IwM_iMbPfqWSCKrMrI5IqN9HrR9tXEHld90)
 2. Enter App Name of your choice
 3. A password will pop-up. This will be your **SMTP Password**
