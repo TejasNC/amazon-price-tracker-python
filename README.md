@@ -31,4 +31,4 @@ The libraries, modules and other tools referred during this task are as follows:
 <ul>
   <li><a href= "https://www.geeksforgeeks.org/amazon-product-price-tracker-using-python/">Amazon Product Price Tracker- Geeks for Geeks</a></li>
   <li><a href= "https://www.scrapehero.com/tutorial-how-to-scrape-amazon-seller-prices-using-python/">Scape Hero Tutorial</a></li>
-  </ul>
+</ul>
