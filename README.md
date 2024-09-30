@@ -33,7 +33,7 @@ The libraries, modules and other tools referred during this task are as follows:
 
 
 ### Note
-- This script uses Gmail's SMTP server to send the email. You can use any email server to send the email.
+- This script uses GMail's SMTP server to send the email. You can use any email server to send the email.
 
 ### Reference Links
 <h3>Price Tracker using Python</h3>
