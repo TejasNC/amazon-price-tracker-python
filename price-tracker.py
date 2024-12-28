@@ -14,42 +14,31 @@ headers = {
     "User-Agent": params['User-Agent']
 }
 
-# send a request to fetch HTML of the page
-response = requests.get(params["URL"], headers=headers)
-
-# create the soup object
-soup = BeautifulSoup(response.content, 'html.parser')
-
-# change the encoding to utf-8
-soup.encode('utf-8')
-
-#print(soup.prettify())
-
 # function to check if the price has dropped below 20,000
-def check_price(prev_price=0):
-  title = soup.find(id= "productTitle").get_text()
-  price = soup.find(class_ = "a-price-whole").get_text().replace(',', '').replace('₹', '').replace(' ', '').strip()
-  #print(price)
-
-  #converting the string amount to float
-  converted_price = float(price[0:5])
-  print(converted_price)
+def check_price(soup, prev_price=0):
   
-  if(converted_price < params['Target_Price']):
-    send_mail(converted_price, below_budget=True)
-  else:
-    # print('Price is still high')
+    title = soup.find(id= "productTitle").get_text()
+    price = soup.find(class_ = "a-price-whole").get_text().replace(',', '').replace('₹', '').replace(' ', '').strip()
+    #print(price)
+
+    #converting the string amount to float
+    converted_price = float(price[0:5])
+    print(converted_price)
+
     if prev_price==0:
-      send_mail(converted_price, below_budget=False)
+        send_mail(converted_price, below_budget=False)
+
+    elif(converted_price < params['Target_Price']):
+        send_mail(converted_price, below_budget=True)
+
     else:
-      diff = prev_price - converted_price #if price has risen, then the diff will be negative
-      send_mail(diff, below_budget=False)
-  #using strip to remove extra spaces in the title
-  prev_price = converted_price
-  print(title.strip())
+        diff = prev_price - converted_price #if price has risen, then the diff will be negative
+        send_mail(diff, below_budget=False)
 
+    #using strip to remove extra spaces in the title
+    print(title.strip())
 
-
+    return converted_price
 
 # function that sends an email if the prices fell down
 def send_mail(diff,below_budget=True):
@@ -63,7 +52,7 @@ def send_mail(diff,below_budget=True):
 
     server.login(params["Sender_Email"], params["Sender_Email_Password"])   #enter sender email id and sender email id password
 
-    subject = 'Price Has Fallen Down Below Target!'
+    subject = 'Price Update!!!'
     URL = params["URL"]
     body = f"Check the amazon link {URL}"
 
@@ -89,8 +78,9 @@ def send_mail(diff,below_budget=True):
       subject = f'Price Has Fallen By {diff}!'
       URL = params["URL"]
       body = f"Check the amazon link {URL}"   
+    
     else:
-      return 
+       return # if the no price change, then do not send mail
         
     print('Price is still higher than Target Price')
     server = smtplib.SMTP('smtp.gmail.com', 587)    
@@ -115,5 +105,11 @@ def send_mail(diff,below_budget=True):
 #loop that allows the program to regularly check for prices
 prev_price = 0 
 while(True):
-  check_price(prev_price)
+  # send a request to fetch HTML of the page
+  response = requests.get(params["URL"], headers=headers)
+  # create the soup object  
+  soup = BeautifulSoup(response.content, 'html.parser')
+  # change the encoding to utf-8
+  soup.encode('utf-8')
+  prev_price = check_price(soup, prev_price)
   time.sleep(params['Time_Interval']) # the time after which you want the program to check the price in seconds. It is currently set to 1 day
